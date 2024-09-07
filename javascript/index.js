@@ -20,12 +20,11 @@ document.querySelector('form').addEventListener('submit', async function (e) {
 
         if (data.success) {
             alert('Inicio de sesión exitoso');
-            // Redirigir a otra página, si es necesario
         } else {
             alert('Credenciales incorrectas');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al iniciar sesión. Inténtalo más tarde.');
+        alert('Error al iniciar sesión. Inténtalo nuevamente');
     }
 });
