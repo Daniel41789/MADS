@@ -8,6 +8,15 @@ const port = 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+}));
+
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+});
 
 const db = mysql.createConnection({
     host: 'localhost',
@@ -27,24 +36,24 @@ db.connect(err => {
 
 // Consulta para el inicio de sesión
 app.post('/login', (req, res) => {
-    const { usuario, contraseña } = req.body;
+    const { username, password } = req.body;
 
-    if (!usuario || !contraseña) {
+    if (!username || !password) {
         return res.status(400).json({ success: false, message: 'Campos incompletos' });
     }
 
-    const query = 'SELECT * FROM users WHERE usuario = ?';
+    const query = 'SELECT * FROM users WHERE username = ?';
     
-    db.query(query, [usuario], (err, results) => {
+    db.query(query, [username], (err, results) => {
         if (err) {
             console.error('Error en la consulta:', err);
             return res.status(500).json({ success: false, message: 'Error en el servidor' });
         }
 
         if (results.length > 0) {
-            const user = results[0];
+            const username = results[0];
 
-            if (user.contraseña === contraseña) {
+            if (username.password === password) {
                 return res.json({ success: true, message: 'Inicio de sesión exitoso' });
             } else {
                 return res.json({ success: false, message: 'Contraseña incorrecta' });
