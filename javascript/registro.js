@@ -1,5 +1,3 @@
-"Cambios de prueba"
-"Cambio 2"
 document.querySelector('#registroForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -13,7 +11,7 @@ document.querySelector('#registroForm').addEventListener('submit', async functio
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                email: email,
+                username: email,
                 password: password,
             }),
         });
