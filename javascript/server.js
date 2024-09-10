@@ -21,7 +21,7 @@ app.listen(port, () => {
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Daniel4178',
+    password: 'rorm990913',
     database: 'mads'
 });
 
