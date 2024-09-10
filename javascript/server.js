@@ -63,3 +63,41 @@ app.post('/login', (req, res) => {
         }
     });
 });
+
+// Ruta para el registro de usuarios
+app.post('/register', (req, res) => {
+    const { email, password } = req.body;
+
+    // Verificar que los campos no estén vacíos
+    if (!email || !password) {
+        return res.status(400).json({ success: false, message: 'Campos incompletos' });
+    }
+
+    // Verificar si el usuario ya existe en la base de datos
+    const checkUserQuery = 'SELECT * FROM users WHERE email = ?';
+    
+    db.query(checkUserQuery, [email], (err, results) => {
+        if (err) {
+            console.error('Error en la consulta:', err);
+            return res.status(500).json({ success: false, message: 'Error en el servidor' });
+        }
+
+        if (results.length > 0) {
+            // Si el usuario ya existe
+            return res.status(400).json({ success: false, message: 'El usuario ya existe' });
+        } else {
+            // Insertar el nuevo usuario en la base de datos
+            const insertUserQuery = 'INSERT INTO users (email, password) VALUES (?, ?)';
+            
+            db.query(insertUserQuery, [email, password], (err, result) => {
+                if (err) {
+                    console.error('Error al insertar el usuario:', err);
+                    return res.status(500).json({ success: false, message: 'Error al registrar el usuario' });
+                }
+
+                return res.status(201).json({ success: true, message: 'Usuario registrado con éxito' });
+            });
+        }
+    });
+});
+
