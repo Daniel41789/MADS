@@ -152,3 +152,38 @@ app.post('/api/update-profile', (req, res) => {
         return res.json({ success: true, message: 'Perfil actualizado correctamente' });
     });
 });
+
+
+/* ----------------------------------------------- Registro de usuario ----------------------------------------*/
+// Endpoint para registrar un nuevo usuario
+app.post('/api/register', (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ success: false, message: 'Campos incompletos' });
+    }
+
+    // Verifica si el usuario ya existe
+    const checkQuery = 'SELECT * FROM users WHERE username = ?';
+    db.query(checkQuery, [username], (err, results) => {
+        if (err) {
+            console.error('Error en la consulta:', err);
+            return res.status(500).json({ success: false, message: 'Error en el servidor' });
+        }
+
+        if (results.length > 0) {
+            return res.status(400).json({ success: false, message: 'El usuario ya existe' });
+        }
+
+        // Inserta el nuevo usuario en la base de datos
+        const insertQuery = 'INSERT INTO users (username, password) VALUES (?, ?)';
+        db.query(insertQuery, [username, password], (err, results) => {
+            if (err) {
+                console.error('Error al registrar el usuario:', err);
+                return res.status(500).json({ success: false, message: 'Error en el servidor' });
+            }
+
+            return res.json({ success: true, message: 'Usuario registrado correctamente' });
+        });
+    });
+});
