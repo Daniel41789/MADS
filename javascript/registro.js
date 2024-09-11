@@ -20,12 +20,16 @@ document.querySelector('#registroForm').addEventListener('submit', async functio
 
         if (data.success) {
             alert('Registro exitoso');
-            window.location.href = './index.html';  // Redirige al login después del registro
+            window.location.href = './index.html';  // Redireccionar a la página de inicio de sesión
         } else {
-            alert('Error en el registro: ' + data.message);
+            alert(data.message);
         }
     } catch (error) {
         console.error('Error:', error);
         alert('Error al registrar. Inténtalo nuevamente');
     }
+});
+// Evento para el botón "Regresar"
+document.querySelector('#regresarBtn').addEventListener('click', function () {
+    window.location.href = './index.html';  // Redirigir al inicio de sesión
 });
