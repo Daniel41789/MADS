@@ -20,6 +20,9 @@ document.querySelector('form').addEventListener('submit', async function (e) {
 
         if (data.success) {
             alert('Inicio de sesión exitoso');
+            // Almacenar el ID del usuario en el almacenamiento local
+            localStorage.setItem('userId', data.userId);
+            window.location.href = 'main.html';
         } else {
             alert('Credenciales incorrectas');
         }
