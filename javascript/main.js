@@ -39,10 +39,16 @@ function iniciarJornada() {
     jornadaIniciada = true;
     toggleButtons();
 
-    // Llamada AJAX para registrar el inicio de la jornada en la base de datos
+    const userId = localStorage.getItem('userId');
+
+    if (!userId) {
+        console.error('No se encontró el userId en localStorage');
+        return;
+    }
+
     const data = {
         user_id: userId,
-        start_time: formattedDate // Usa la fecha formateada
+        start_time: formattedDate
     };
 
     fetch('http://localhost:3000/api/jornada/iniciar', {
@@ -61,6 +67,8 @@ function iniciarJornada() {
     });
 }
 
+
+
 // Función para terminar la jornada
 function acabarJornada() {
     const now = new Date();
@@ -70,10 +78,16 @@ function acabarJornada() {
     jornadaIniciada = false;
     toggleButtons();
 
-    // Llamada AJAX para registrar el fin de la jornada en la base de datos
+    const userId = localStorage.getItem('userId');
+
+    if (!userId) {
+        console.error('No se encontró el userId en localStorage');
+        return;
+    }
+
     const data = {
         user_id: userId,
-        end_time: formattedDate // Usa la fecha formateada
+        end_time: formattedDate
     };
 
     fetch('http://localhost:3000/api/jornada/terminar', {
@@ -91,6 +105,7 @@ function acabarJornada() {
         console.error('Error al finalizar jornada:', error);
     });
 }
+
 
 // Función para verificar si hay una jornada activa al cargar la página
 /*function checkJornadaActiva() {

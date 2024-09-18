@@ -55,7 +55,6 @@ app.post('/login', (req, res) => {
             const user = results[0];
 
             if (user.password === password) {
-                // Devolver el ID del usuario y el estado de éxito´
                 return res.json({ success: true, message: 'Inicio de sesión exitoso', userId: user.id });
             } else {
                 return res.json({ success: false, message: 'Contraseña incorrecta' });
@@ -72,7 +71,6 @@ app.post('/api/jornada/iniciar', (req, res) => {
     if (!user_id || !start_time) {
         return res.status(400).json({ success: false, message: 'Datos incompletos' });
     }
-
     const query = 'INSERT INTO jornadas (user_id, start_time) VALUES (?, ?)';
 
     db.query(query, [user_id, start_time], (err, results) => {
@@ -81,7 +79,7 @@ app.post('/api/jornada/iniciar', (req, res) => {
             return res.status(500).json({ success: false, message: 'Error en el servidor' });
         }
 
-        return res.json({ success: true, message: 'Jornada iniciada correctamente' });
+        return res.json({ success: true, message: 'Jornada iniciada correctamente', userId: user_id });
     });
 });
 
