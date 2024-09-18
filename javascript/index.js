@@ -22,7 +22,12 @@ document.querySelector('form').addEventListener('submit', async function (e) {
             alert('Inicio de sesión exitoso');
             // Almacenar el ID del usuario en el almacenamiento local
             localStorage.setItem('userId', data.userId);
-            window.location.href = 'main.html';
+
+            if (data.userId === 1) {
+                window.location.href = 'admin.html';  // Redirige a la página de administrador
+            } else {
+                window.location.href = 'main.html';  // Redirige a la página de usuario regular
+            }
         } else {
             alert('Credenciales incorrectas');
         }
