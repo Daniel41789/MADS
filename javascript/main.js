@@ -1,7 +1,7 @@
 let jornadaIniciada = false;
 let horaInicio = null;
 let horaFin = null;
-let userId = 1;  
+//let userId = 1;  
 
 // Función para habilitar/deshabilitar botones
 function toggleButtons() {

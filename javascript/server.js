@@ -187,3 +187,28 @@ app.post('/api/register', (req, res) => {
         });
     });
 });
+
+
+/* Consultas del administrador*/
+app.get('/jornadas/:username', (req, res) => {
+    const { username } = req.params;
+
+    const query = `
+        SELECT j.start_time, j.end_time 
+        FROM jornadas j
+        JOIN users u ON j.user_id = u.id
+        WHERE u.username = ?`;
+
+    db.query(query, [username], (err, results) => {
+        if (err) {
+            console.error('Error en la consulta:', err);
+            return res.status(500).json({ success: false, message: 'Error en el servidor' });
+        }
+
+        if (results.length > 0) {
+            return res.json({ success: true, jornadas: results });
+        } else {
+            return res.json({ success: false, message: 'No se encontraron jornadas para este usuario' });
+        }
+    });
+});

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,36 +9,39 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/adminView.css">
 </head>
+
 <body>
-     <header class="hero">
+    <header class="hero">
         <nav>
             <div class="page-title">
                 <h1>Bienvenido Administrador</h1>
             </div>
-        </nav>
-
-         <ul class="nav-menu">
-
-         </ul>
-        
-     </header>
-    
-    <div class="container">
-        <div class="row mt-4">
-            <div class="col-md-6">
+            <div class="btn-dark-mode">
                 <button id="toggle-dark-mode" class="btn btn-secondary">Modo Claro/Oscuro</button>
             </div>
-            <div class="col-md-6 text-end">
-                <button id="logout" class="btn btn-danger" >Cerrar Sesión</button>
+            <div class="btn-logout">
+                <img src="../icons/logout.svg" id="logout" class="btn btn-logout">
             </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-md-12 text-center">
+            <div>
                 <img id="profile-pic" src="../icons/profile.jpg" alt="Foto de perfil" class="rounded-circle" width="150" height="150">
             </div>
+        </nav>
+        <div class="container">
+            <!-- Barra de búsqueda -->
+            <div class="search-bar">
+                <input type="text" id="usernameInput" class="form-control" placeholder="Ingrese el username del usuario">
+                <button id="searchUserBtn" class="btn btn-primary mt-2">Buscar Jornadas</button>
+            </div>
+            
+            <!-- Contenedor donde se mostrarán las jornadas -->
+            <div id="jornadasResult" class="mt-4"></div>
         </div>
-    </div>
+    </header>
+
+   
+
 
     <script src="../javascript/admin.js"></script>
 </body>
+
 </html>
