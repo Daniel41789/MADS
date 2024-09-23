@@ -43,7 +43,7 @@ app.post('/login', (req, res) => {
         return res.status(400).json({ success: false, message: 'Campos incompletos' });
     }
 
-    const query = 'SELECT id, password FROM users WHERE username = ?';
+    const query = 'SELECT id, username, password FROM users WHERE username = ?';
     
     db.query(query, [username], (err, results) => {
         if (err) {
@@ -55,7 +55,7 @@ app.post('/login', (req, res) => {
             const user = results[0];
 
             if (user.password === password) {
-                return res.json({ success: true, message: 'Inicio de sesión exitoso', userId: user.id });
+                return res.json({ success: true, message: 'Inicio de sesión exitoso', userId: user.id, username: user.username});
             } else {
                 return res.json({ success: false, message: 'Contraseña incorrecta' });
             }
@@ -208,5 +208,45 @@ app.get('/jornadas/:username', (req, res) => {
         } else {
             return res.json({ success: false, message: 'No se encontraron jornadas para este usuario' });
         }
+    });
+});
+
+
+/* Inicio de comida */
+app.post('/api/comida/iniciar', (req, res) => {
+    const { user_id, start_timeC } = req.body;
+
+    if (!user_id || !start_timeC) {
+        return res.status(400).json({ success: false, message: 'Datos incompletos' });
+    }
+    const query = 'INSERT INTO jornadas (user_id, start_lunch) VALUES (?, ?)';
+
+    db.query(query, [user_id, start_timeC], (err, results) => {
+        if (err) {
+            console.error('Error al registrar el inicio de la Comida:', err);
+            return res.status(500).json({ success: false, message: 'Error en el servidor' });
+        }
+
+        return res.json({ success: true, message: 'Comida iniciada correctamente', userId: user_id });
+    });
+});
+
+/* Terminar la comida */
+app.post('/api/comida/terminar', (req, res) => {
+    const { user_id, end_timeC } = req.body;
+
+    if (!user_id || !end_timeC) {
+        return res.status(400).json({ success: false, message: 'Datos incompletos' });
+    }
+
+    const query = 'UPDATE jornadas SET end_lunch = ? WHERE user_id = ? AND end_time IS NULL';
+
+    db.query(query, [end_timeC, user_id], (err, results) => {
+        if (err) {
+            console.error('Error al finalizar la Comida:', err);
+            return res.status(500).json({ success: false, message: 'Error en el servidor' });
+        }
+
+        return res.json({ success: true, message: 'Comida finalizada correctamente' });
     });
 });

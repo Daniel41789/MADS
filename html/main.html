@@ -37,6 +37,30 @@
             </div>
         </div>
 
+        <!--Botones para la hora de comida-->
+        <div class="row mt-5 text-center">
+            <div class="col-md-12">
+                <button id="start-lunch" class="btn btn-success btn-lg">Iniciar Comida</button>
+                <button id="end-lunch" class="btn btn-danger btn-lg" disabled>Terminar Comida</button>
+            </div>
+        </div>
+
+        <div class="row mt-3 text-center">
+            <div class="col-md-12">
+                <p>Inicio de Jornada: <span id="start-timeC">No iniciado</span></p>
+                <p>Fin de Jornada: <span id="end-timeC">No finalizado</span></p>
+            </div>
+        </div>
+
+        <!-- Botón para mostrar jornadas -->
+        <button id="show-jornadas-btn">Mostrar Jornadas</button>
+
+        <!-- Recuadro para mostrar las jornadas -->
+        <div id="jornadas-container">
+            <h4>Jornadas del Usuario:</h4>
+            <div id="jornadas-list"></div>
+        </div>
+
         <div class="row mt-5">
             <div class="col-md-12 text-center">
                 <!-- Campo de información del usuario -->

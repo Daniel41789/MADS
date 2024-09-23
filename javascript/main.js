@@ -1,8 +1,7 @@
 let jornadaIniciada = false;
 let horaInicio = null;
 let horaFin = null;
-//let userId = 1;  
-
+let comidaIniciada = false;
 // Función para habilitar/deshabilitar botones
 function toggleButtons() {
     document.getElementById('start-day').disabled = jornadaIniciada;
@@ -134,6 +133,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Evento para acabar la jornada
     document.getElementById('end-day').addEventListener('click', acabarJornada);
+
+
+    toggleButtonsLunch(); 
+    document.getElementById('start-lunch').addEventListener('click', iniciarComida);
+    document.getElementById('end-lunch').addEventListener('click', acabarComida);
 });
 
 
@@ -180,3 +184,120 @@ document.getElementById('save-changes').addEventListener('click', function() {
     });
 });
 
+/*Mostrar jornadas del user */
+document.getElementById('show-jornadas-btn').addEventListener('click', async function () {
+    // Obtén el username almacenado en localStorage
+    const username = localStorage.getItem('username');
+
+    if (!username) {
+        alert('Usuario no autenticado. Inicie sesión nuevamente.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:3000/jornadas/${username}`, {
+            method: 'GET',
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            const jornadasList = document.getElementById('jornadas-list');
+            jornadasList.innerHTML = ''; // Limpia el contenido anterior
+
+            // Muestra cada jornada
+            data.jornadas.forEach(jornada => {
+                const jornadaItem = document.createElement('div');
+                jornadaItem.innerHTML = `
+                    <p>Inicio: ${jornada.start_time}</p>
+                    <p>Fin: ${jornada.end_time ? jornada.end_time : 'En curso'}</p>
+                `;
+                jornadasList.appendChild(jornadaItem);
+            });
+        } else {
+            alert('No se encontraron jornadas para este usuario.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al obtener las jornadas.');
+    }
+});
+
+
+/* Iniciar comida */
+// Función para habilitar/deshabilitar botones
+function toggleButtonsLunch() {
+    document.getElementById('start-lunch').disabled = comidaIniciada;
+    document.getElementById('end-lunch').disabled = !comidaIniciada;
+}
+function iniciarComida() {
+    const now = new Date();
+    const formattedDate = formatDateForMySQL(now);
+
+    document.getElementById('start-timeC').textContent = formattedDate;
+    comidaIniciada = true;
+    toggleButtonsLunch();
+
+    const userId = localStorage.getItem('userId');
+
+    if (!userId) {
+        console.error('No se encontró el userId en localStorage');
+        return;
+    }
+
+    const data = {
+        user_id: userId,
+        start_timeC: formattedDate
+    };
+
+    fetch('http://localhost:3000/api/comida/iniciar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Comida iniciada:', data);
+    })
+    .catch(error => {
+        console.error('Error al iniciar Comida:', error);
+    });
+}
+
+function acabarComida() {
+    const now = new Date();
+    const formattedDate = formatDateForMySQL(now);
+
+    document.getElementById('end-timeC').textContent = formattedDate;
+    jornadaIniciada = false;
+    toggleButtonsLunch();
+
+    const userId = localStorage.getItem('userId');
+
+    if (!userId) {
+        console.error('No se encontró el userId en localStorage');
+        return;
+    }
+
+    const data = {
+        user_id: userId,
+        end_timeC: formattedDate
+    };
+
+    fetch('http://localhost:3000/api/comida/terminar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Comida finalizada:', data);
+    })
+    .catch(error => {
+        console.error('Error al finalizar Comida:', error);
+    });
+}

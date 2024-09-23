@@ -22,6 +22,7 @@ document.querySelector('form').addEventListener('submit', async function (e) {
             alert('Inicio de sesión exitoso');
             // Almacenar el ID del usuario en el almacenamiento local
             localStorage.setItem('userId', data.userId);
+            localStorage.setItem('username', data.username);
 
             if (data.userId === 1) {
                 window.location.href = 'admin.html';  // Redirige a la página de administrador
